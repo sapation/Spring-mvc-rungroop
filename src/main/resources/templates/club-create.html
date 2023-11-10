@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>Club Add</title>
+</head>
+<body class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+
+    <!-- Page Content-->
+    <section class="py-5" layout:fragment="body">
+      <div class="container">
+            <form role="form" method="post" th:action="@{/clubs/new}" th:object="${club}">
+                <input type="hidden" th:field="*{id}" />
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input
+                            type="text"
+                            class="form-control" id="title"
+                            name="title"
+                            th:field="*{title}"
+                            placeholder="Club title">
+                    <p th:if="${#fields.hasErrors('title')}" class="text-danger" th:errors="*{title}"></p>
+                </div>
+                <div class="mb-3">
+                    <label for="photourl" class="form-label">Photourl</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="photourl"
+                            name="photoUrl"
+                            th:field="*{photoUrl}"
+                            placeholder="Club Photo">
+                    <p th:if="${#fields.hasErrors('photoUrl')}" class="text-danger" th:errors="*{photoUrl}"></p>
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content</label>
+                    <textarea
+                            class="form-control"
+                            id="content"
+                            name="content"
+                            th:field="*{content}"
+                            placeholder="Content">
+                            rows="3"></textarea>
+                    <p th:if="${#fields.hasErrors('content')}" class="text-danger" th:errors="*{content}"></p>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+      </div>
+    </section>
+
+</main>
+
+</body>
+</html>
