@@ -9,6 +9,12 @@ import com.rungroop.web.services.IEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.rungroop.web.mapper.EventMapper.mapToEvent;
+import static com.rungroop.web.mapper.EventMapper.mapToEventDto;
+
 @Service
 public class EventServiceImpl implements IEventService{
     private IEventRepository _eventRepository;
@@ -25,18 +31,30 @@ public class EventServiceImpl implements IEventService{
         Club club = _clubRepository.findById(clubId).get();
         Event event = mapToEvent(eventDto);
         event.setClub(club);
+        _eventRepository.save(event);
     }
 
-    private Event mapToEvent(EventDto eventDto) {
-        return Event.builder()
-                .id(eventDto.getId())
-                .name(eventDto.getName())
-                .startTime(eventDto.getStartTime())
-                .endTime(eventDto.getEndTime())
-                .type(eventDto.getType())
-                .photoUrl(eventDto.getPhotoUrl())
-                .createdOn(eventDto.getCreatedOn())
-                .updatedOn(eventDto.getUpdatedOn())
-                .build();
+    @Override
+    public List<EventDto> findAllEvents() {
+        List<Event> events = _eventRepository.findAll();
+        return events.stream().map(event -> mapToEventDto(event)).collect(Collectors.toList());
     }
+
+    @Override
+    public EventDto findByEventId(Long eventId) {
+        Event event = _eventRepository.findById(eventId).get();
+        return mapToEventDto(event);
+    }
+
+    @Override
+    public void updateEvent(EventDto eventDto) {
+        Event event = mapToEvent(eventDto);
+        _eventRepository.save(event);
+    }
+
+    @Override
+    public void delete(long eventId) {
+        _eventRepository.deleteById(eventId);
+    }
+
 }
